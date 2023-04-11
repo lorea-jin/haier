@@ -1,5 +1,5 @@
 <template>
-  <div class="container-Box">
+  <div class="container-Box" ref="containerRef">
     <section class="mainbox">
       <div class="column">
         <div class="left">
@@ -21,7 +21,9 @@
 </template>
 
 <script>
-import { getTable02 } from '@/api/index.js'
+// import { getTable02 } from '@/api/index.js'
+import mockData from '@/constant/data.json'
+
 const HaiLeftConstant = {
   Series: '',
   Model: '产品型号',
@@ -55,18 +57,24 @@ export default {
     }
   },
   created() {
-    let time= this.searchDate ? this.searchDate : new Date()
+	
+    let time = this.searchDate ? this.searchDate : new Date()
     this.getTable(time)
   },
   methods: {
     async getTable(time) {
-      const { Data } = await getTable02(time)
+      // const { Data } = await getTable02(time)
+      console.log(time)
+      const { Data } = await mockData.getTable02
       console.log(Data)
+
       this.listdata = Data.Part1Objects
       this.listRightTopdata = Data.Part2Objects
       this.listRightDowndata = Data.Part3Objects
 
-      this.listdata.unshift(HaiLeftConstant)
+      // this.listdata.unshift(HaiLeftConstant)
+			this.listdata=[HaiLeftConstant,...this.listdata]
+
       this.generateTable(this.$refs.table1, this.listdata)
       this.generateTableHead(this.$refs.table1, this.listdata)
 
@@ -136,15 +144,13 @@ export default {
   watch: {},
   computed: {},
   filters: {},
-  beforeUnmount() {
-    this.$refs.table1.remove()
-  },
+
 }
 </script>
 
 <style lang="scss">
 .mainbox {
-	width: 100%;
+  width: 100%;
   min-width: 1024px;
   padding: 0.125rem 0.125rem 0;
   display: flex;

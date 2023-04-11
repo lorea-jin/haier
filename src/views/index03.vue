@@ -27,8 +27,9 @@
 </template>
 
 <script>
-import { getTable03 } from '@/api/index.js'
-const HaiLeftConstant = {
+// import { getTable03 } from '@/api/index.js'
+import mockData from '@/constant/data.json'
+let HaiLeftConstant = {
   Series: '',
   Model: '产品型号',
   ModelID: '机编',
@@ -36,9 +37,6 @@ const HaiLeftConstant = {
   Param2: '真空度',
   Param3: '判定结果',
   Param4: '人工扫描合格率',
-}
-const firstCol = {
-  Series: '',
 }
 export default {
   name: 'index03',
@@ -53,41 +51,64 @@ export default {
       listdata: [],
       listRightTopdata: [],
       listRightDowndata: [],
+      listRightDowndataBefore: [],
+      listRightDowndataAfter: [],
     }
   },
   created() {
-    let time= this.searchDate ? this.searchDate : new Date()
+    let time = this.searchDate ? this.searchDate : new Date()
     this.getTable(time)
   },
   methods: {
     async getTable(time) {
-      const { Data } = await getTable03(time)
+      // const { Data } = await getTable03(time)
+      console.log(time)
+      const { Data } = await mockData.getTable03
       this.listdata = Data.Part1Objects
-      this.listRightTopdata = Data.Part2Objects
+      this.listRightTopdata =JSON.parse(JSON.stringify( Data.Part2Objects))
       this.listRightDowndata = Data.Part3Objects
 
-      this.listdata.unshift(HaiLeftConstant)
+      // 上部分
+      // this.listdata.unshift(HaiLeftConstant)
+      this.listdata = [HaiLeftConstant, ...this.listdata]
       this.generateTable(this.$refs.table1, this.listdata)
       this.generateTableHead(this.$refs.table1, this.listdata)
 
+      // 下左部分
       this.listRightTopdata = this.delWithRight(this.listRightTopdata)
-      this.listRightTopdata.unshift(firstCol)
       this.generateTable(this.$refs.table2, this.listRightTopdata)
       this.generateTableHead(this.$refs.table2, this.listRightTopdata)
 
       // rightDown
-      this.listRightDowndata = this.delWithRight(this.listRightDowndata)
-      this.listRightDowndata.unshift(firstCol)
-			let before=this.listRightDowndata.slice(0,5)
-			let after=this.listRightDowndata.slice(5)
-      this.generateTable(this.$refs.table3,before)
-      this.generateTableHead(this.$refs.table3, before)
+      let before = JSON.parse(JSON.stringify(this.listRightDowndata)).map(item => {
+        return {
+          Series: item.Series,
+          Members: item.Members.slice(0, 5),
+        }
+      })
+      let after = JSON.parse(JSON.stringify(this.listRightDowndata)).map(item => {
+        return {
+          Series: item.Series,
+          Members: item.Members.slice(5),
+          // Members:item.Members.slice(6, 5)
+        }
+      })
 
-			this.generateTable(this.$refs.table4, after)
-      this.generateTableHead(this.$refs.table4, after)
+      this.listRightDowndataBefore = this.delWithRight(before)
+      this.listRightDowndataAfter = this.delWithRight(after)
+
+      // this.listRightDowndataBefore.unshift(firstCol)
+      // this.listRightDowndataAfter.unshift(firstCol)
+
+      this.generateTable(this.$refs.table3, this.listRightDowndataBefore)
+      this.generateTableHead(this.$refs.table3, this.listRightDowndataBefore)
+
+      this.generateTable(this.$refs.table4, this.listRightDowndataAfter)
+      this.generateTableHead(this.$refs.table4, this.listRightDowndataAfter)
     },
 
     generateTable(mytable, data) {
+      debugger
       for (const key in data[0]) {
         if (key !== 'Series') {
           let row = mytable.insertRow()
@@ -122,6 +143,9 @@ export default {
     },
 
     delWithRight(arr) {
+      let firstCol = {
+        Series: '',
+      }
       let re = arr.map((obj, i) => {
         for (const key in obj.Members) {
           obj[`Value${key}`] = obj.Members[key].Value
@@ -134,6 +158,7 @@ export default {
           ...obj,
         }
       })
+      re = [firstCol, ...re]
       return re
     },
   },
@@ -141,9 +166,6 @@ export default {
   watch: {},
   computed: {},
   filters: {},
-  beforeUnmount() {
-    this.$refs.table1?.remove()
-  },
 }
 </script>
 
@@ -175,14 +197,14 @@ export default {
   }
 
   .right {
-   display: flex;
+    display: flex;
     height: 100%;
     background: url('~@/assets/p7/right.png') no-repeat center;
     background-size: 100% 100%;
     padding: 6% 6% 6% 4%;
-		#table{
-			flex: 1;
-		}
+    #table {
+      flex: 1;
+    }
   }
 
   .Content {
@@ -254,7 +276,8 @@ export default {
   }
 }
 
-/deep/#table3 {
+/deep/#table3,
+/deep/#table4 {
   tr {
     height: 20%;
   }

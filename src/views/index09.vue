@@ -42,7 +42,9 @@
 </template>
 
 <script>
-import { getTable09 } from '@/api/index.js'
+// import { getTable09 } from '@/api/index.js'
+import mockData from '@/constant/data.json'
+
 export default {
   name: 'index09',
   props: {
@@ -63,8 +65,11 @@ export default {
   },
   methods: {
     async getTable(time) {
-      const { Data } = await getTable09(time)
-      console.log(Data)
+      // const { Data } = await getTable09(time)
+			console.log(time)
+      const { Data } = await mockData.getTable09
+
+    
       this.tableData = Data
     },
     indexMethod(index) {

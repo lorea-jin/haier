@@ -64,7 +64,8 @@
 </template>
 
 <script>
-import { getTable05 } from '@/api/index.js'
+// import { getTable05 } from '@/api/index.js'
+import mockData from '@/constant/data.json'
 export default {
   name: '',
   props: {
@@ -92,7 +93,10 @@ export default {
   },
   methods: {
     async getTable(time) {
-      const { Data } = await getTable05(time)
+      // const { Data } = await getTable05(time)
+			console.log(time)
+      const { Data } = await mockData.getTable05
+
       this.tableData = Data.Part1Objects
       this.listRightTopdata = this.changeToElTableData(Data.Part2Objects)
       this.listRightBottomdata = this.changeToElTableData(Data.Part3Objects)

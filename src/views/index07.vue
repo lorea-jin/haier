@@ -133,7 +133,8 @@
 </template>
 
 <script>
-import { getTable07 } from '@/api/index.js'
+// import { getTable07 } from '@/api/index.js'
+import mockData from '@/constant/data.json'
 export default {
   name: '',
   props: {
@@ -171,7 +172,10 @@ export default {
   },
   methods: {
     async getTable(time) {
-      const { Data } = await getTable07(time)
+      // const { Data } = await getTable07(time)
+			console.log(time)
+      const { Data } = await mockData.getTable07
+
       this.tableData = Data.Part1Objects
       // 表格
       this.listRightTopdata = this.changeToElTableData(Data.Part2Objects)

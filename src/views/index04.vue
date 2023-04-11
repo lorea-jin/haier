@@ -45,7 +45,8 @@
 const firstCol = {
   Series: '',
 }
-import { getTable04 } from '@/api/index.js'
+// import { getTable04 } from '@/api/index.js'
+import mockData from '@/constant/data.json'
 const HaiLeftConstant = {
   Series: '',
   Model: '产品型号',
@@ -79,12 +80,17 @@ export default {
   },
   methods: {
     async getTable(time) {
-      const { Data } = await getTable04(time)
+      // const { Data } = await getTable04(time)
+			console.log(time)
+      const { Data } = await mockData.getTable04
+
       this.tableData = Data.Part1Objects
       this.listRightTopdata = this.changeToElTableData(Data.Part2Objects)
       this.listRightBottomdata = this.changeToElTableData(Data.Part3Objects)
 
-      this.tableData.unshift(HaiLeftConstant)
+      // this.tableData.unshift(HaiLeftConstant)
+			this.tableData=[HaiLeftConstant,...this.tableData]
+
       this.generateTable(this.$refs.table1, this.tableData)
       this.generateTableHead(this.$refs.table1, this.tableData)
     },
