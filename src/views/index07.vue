@@ -634,4 +634,7 @@ export default {
     vertical-align: middle;
   }
 }
+.el-col{
+	height: 100%;
+}
 </style>
