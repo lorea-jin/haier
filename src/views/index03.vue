@@ -108,7 +108,6 @@ export default {
     },
 
     generateTable(mytable, data) {
-      debugger
       for (const key in data[0]) {
         if (key !== 'Series') {
           let row = mytable.insertRow()

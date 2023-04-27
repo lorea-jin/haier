@@ -225,9 +225,9 @@ export default {
           const myChart = this.$echarts.init(this.$refs[elRef])
           myChart.clear()
           myChart.setOption(options)
-          window.onresize = () => {
+					window.addEventListener('resize', () => {
             myChart.resize()
-          }
+          })
         }
       })
     },

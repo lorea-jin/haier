@@ -173,7 +173,7 @@ export default {
   methods: {
     async getTable(time) {
       // const { Data } = await getTable07(time)
-			console.log(time)
+      console.log(time)
       const { Data } = await mockData.getTable07
 
       this.tableData = Data.Part1Objects
@@ -368,9 +368,9 @@ export default {
           const myChart = this.$echarts.init(this.$refs[elRef] || document.getElementById(elRef))
           myChart.clear()
           myChart.setOption(options)
-          window.onresize = () => {
+          window.addEventListener('resize', () => {
             myChart.resize()
-          }
+          })
         }
       })
     },
@@ -624,7 +624,7 @@ export default {
     vertical-align: middle;
   }
 
-	.squareLine::before {
+  .squareLine::before {
     display: inline-block;
     content: '';
     width: 0.25rem;
@@ -634,7 +634,7 @@ export default {
     vertical-align: middle;
   }
 }
-.el-col{
-	height: 100%;
+.el-col {
+  height: 100%;
 }
 </style>
